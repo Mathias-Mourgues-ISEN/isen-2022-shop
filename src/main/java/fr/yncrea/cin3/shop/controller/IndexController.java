@@ -34,9 +34,4 @@ public class IndexController {
 
         return "products-by-category";
     }
-
-    @GetMapping("/login")
-    public String login() {
-        return "login";
-    }
 }

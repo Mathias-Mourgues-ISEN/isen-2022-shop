@@ -1,0 +1,28 @@
+<html th:replace="~{layout :: layout(~{::title}, ~{::content})}" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title th:fragment="title">Création d'un compte</title>
+</head>
+<body>
+<div th:fragment="content">
+  <h1>Création d'un compte</h1>
+
+  <form action="#" th:action="@{/register}" method="post" th:object="${form}">
+    <div class="mb-3">
+      <input th:field="*{username}" class="form-control form-control-lg" type="text" placeholder="Email">
+    </div>
+    <div class="mb-3">
+      <input th:field="*{firstname}" class="form-control form-control-lg" type="text" placeholder="Prénom">
+    </div>
+    <div class="mb-3">
+      <input th:field="*{name}" class="form-control form-control-lg" type="text" placeholder="Nom">
+    </div>
+
+    <div class="mb-3">
+      <input th:field="*{password}" class="form-control form-control-lg" type="password" placeholder="Mot de passe" autocomplete="false">
+    </div>
+
+    <button type="submit" class="btn btn-primary">Créer</button>
+  </form>
+</div>
+</body>
+</html>
