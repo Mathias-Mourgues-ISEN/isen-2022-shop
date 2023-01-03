@@ -28,7 +28,7 @@
                 <li class="nav-item">
                     <a class="nav-link active" aria-current="page" href="#">Home</a>
                 </li>
-                <li class="nav-item dropdown">
+                <li class="nav-item dropdown" sec:authorize="hasRole('ROLE_ADMIN')">
                     <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         Administration
                     </a>
@@ -42,6 +42,15 @@
                 </li>
             </ul>
         </div>
+
+        <form class="d-flex" role="login">
+            <div sec:authorize="isAuthenticated() == true" class="navbar-text">
+                Bonjour <span sec:authentication="principal.username"></span>&nbsp;(<a th:href="@{/logout}" href="#">Déconnexion</a>)
+            </div>
+            <div sec:authorize="isAuthenticated() == false" class="navbar-text">
+                <a th:href="@{/login}" href="#">Connexion</a>
+            </div>
+        </form>
     </div>
 </nav>
 
