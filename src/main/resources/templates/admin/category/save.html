@@ -1,0 +1,20 @@
+<html th:replace="~{layout :: layout(~{::title}, ~{::content})}" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:fragment="title">Gestion des catégories</title>
+</head>
+<body>
+<div th:fragment="content">
+    <h1>Catégorie</h1>
+
+    <form action="#" th:action="@{/admin/category/save}" method="post" th:object="${form}">
+        <input type="hidden" th:field="*{uuid}">
+
+        <div class="mb-3">
+            <input th:field="*{name}" class="form-control form-control-lg" type="text" placeholder="Nom de la catégorie">
+        </div>
+
+        <button type="submit" class="btn btn-primary">Enregistrer</button>
+    </form>
+</div>
+</body>
+</html>

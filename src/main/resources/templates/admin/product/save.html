@@ -1,0 +1,33 @@
+<html th:replace="~{layout :: layout(~{::title}, ~{::content})}" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:fragment="title">Gestion des produits</title>
+</head>
+<body>
+<div th:fragment="content">
+    <h1>Produit</h1>
+
+    <form action="#" th:action="@{/admin/product/save}" method="post" th:object="${form}">
+        <input type="hidden" th:field="*{uuid}">
+
+        <div class="mb-3">
+            <input th:field="*{name}" class="form-control form-control-lg" type="text" placeholder="Nom du produit">
+        </div>
+        <div class="mb-3">
+            <input th:field="*{price}" class="form-control form-control-lg" type="text" placeholder="Prix du produit">
+        </div>
+        <div class="mb-3">
+            <select th:field="*{category}" class="form-select">
+                <option th:each="category : ${categories}" th:value="${category.uuid}" th:text="${category.name}">
+            </select>
+        </div>
+        <div class="mb-3">
+            <textarea th:field="*{description}" class="form-control form-control-lg" type="text" placeholder="Description du produit">
+            </textarea>
+        </div>
+
+
+        <button type="submit" class="btn btn-primary">Enregistrer</button>
+    </form>
+</div>
+</body>
+</html>
