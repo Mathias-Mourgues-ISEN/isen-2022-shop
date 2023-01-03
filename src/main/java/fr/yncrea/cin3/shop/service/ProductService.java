@@ -73,4 +73,8 @@ public class ProductService {
     public List<Product> findAll() {
         return products.findAll();
     }
+
+    public List<Product> findByCategory(UUID uuid) {
+        return products.findByCategoryId(uuid);
+    }
 }

@@ -56,4 +56,9 @@ public class CategoryService {
     public List<Category> findAll() {
         return categories.findAll();
     }
+
+    @Transactional
+    public Category findById(UUID uuid) {
+        return categories.findById(uuid).orElse(null);
+    }
 }
