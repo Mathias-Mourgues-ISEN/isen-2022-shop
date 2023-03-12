@@ -2,6 +2,7 @@ package fr.yncrea.cin3.shop.controller;
 
 import fr.yncrea.cin3.shop.form.RegisterForm;
 import fr.yncrea.cin3.shop.service.UserService;
+import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -29,7 +30,7 @@ public class LoginController {
     }
 
     @PostMapping("/register")
-    public String registerAction(@ModelAttribute("form") RegisterForm form, BindingResult result, Model model) {
+    public String registerAction(@Valid @ModelAttribute("form") RegisterForm form, BindingResult result, Model model) {
         if (result.hasErrors()) {
             model.addAttribute("form", form);
             return "register";
