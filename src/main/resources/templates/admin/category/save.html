@@ -10,7 +10,9 @@
         <input type="hidden" th:field="*{uuid}">
 
         <div class="mb-3">
-            <input th:field="*{name}" class="form-control form-control-lg" type="text" placeholder="Nom de la catégorie">
+            <input th:field="*{name}" class="form-control form-control-lg" type="text" placeholder="Nom de la catégorie"
+                   th:classappend="${not #lists.isEmpty(#fields.errors('name'))} ? is-invalid">
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('name')}" th:errors="*{name}" />
         </div>
 
         <button type="submit" class="btn btn-primary">Enregistrer</button>

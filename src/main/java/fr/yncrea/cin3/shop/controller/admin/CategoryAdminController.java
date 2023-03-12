@@ -2,6 +2,7 @@ package fr.yncrea.cin3.shop.controller.admin;
 
 import fr.yncrea.cin3.shop.form.CategoryForm;
 import fr.yncrea.cin3.shop.service.CategoryService;
+import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -26,7 +27,7 @@ public class CategoryAdminController {
     }
 
     @PostMapping("/save")
-    public String saveAction(@ModelAttribute("form") CategoryForm form, BindingResult result, Model model) {
+    public String saveAction(@Valid @ModelAttribute("form") CategoryForm form, BindingResult result, Model model) {
         // en cas d'erreur, on ré-affiche le formulaire
         if (result.hasErrors()) {
             model.addAttribute("form", form);

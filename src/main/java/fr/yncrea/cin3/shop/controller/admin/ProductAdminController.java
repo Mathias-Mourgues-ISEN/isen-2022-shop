@@ -3,6 +3,7 @@ package fr.yncrea.cin3.shop.controller.admin;
 import fr.yncrea.cin3.shop.form.ProductForm;
 import fr.yncrea.cin3.shop.service.CategoryService;
 import fr.yncrea.cin3.shop.service.ProductService;
+import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -31,7 +32,7 @@ public class ProductAdminController {
     }
 
     @PostMapping("/save")
-    public String saveAction(@ModelAttribute("form") ProductForm form, BindingResult result, Model model) {
+    public String saveAction(@Valid @ModelAttribute("form") ProductForm form, BindingResult result, Model model) {
         // en cas d'erreur, on ré-affiche le formulaire
         if (result.hasErrors()) {
             model.addAttribute("form", form);
