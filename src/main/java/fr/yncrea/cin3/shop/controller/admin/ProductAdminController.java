@@ -51,4 +51,11 @@ public class ProductAdminController {
 
         return "admin/product/list";
     }
+
+    @PostMapping("/remove/{id}")
+    public String remove(@PathVariable UUID id) {
+        service.remove(id);
+
+        return "redirect:/admin/product";
+    }
 }

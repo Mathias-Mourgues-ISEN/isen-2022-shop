@@ -1,8 +1,10 @@
 package fr.yncrea.cin3.shop.service;
 
+import fr.yncrea.cin3.shop.exception.BusinessException;
 import fr.yncrea.cin3.shop.form.CategoryForm;
 import fr.yncrea.cin3.shop.model.Category;
 import fr.yncrea.cin3.shop.repository.CategoryRepository;
+import fr.yncrea.cin3.shop.repository.ProductRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
@@ -13,8 +15,11 @@ import java.util.UUID;
 public class CategoryService {
     private CategoryRepository categories;
 
-    public CategoryService(CategoryRepository categories) {
+    private ProductRepository products;
+
+    public CategoryService(CategoryRepository categories, ProductRepository products) {
         this.categories = categories;
+        this.products = products;
     }
 
     @Transactional
@@ -60,5 +65,22 @@ public class CategoryService {
     @Transactional
     public Category findById(UUID uuid) {
         return categories.findById(uuid).orElse(null);
+    }
+
+    @Transactional
+    public void remove(UUID id, boolean force) {
+        // recherche les ids des produits liés
+        var ids = products.findIdsByCategoryId(id);
+
+        if (!ids.isEmpty() && !force) {
+            throw new BusinessException(String.format("Impossible de supprimer la catégorie, il existe encore %d produits liés", ids.size()));
+        }
+
+        // supprime les produits liés
+        if (!ids.isEmpty())
+            products.deleteAllById(ids);
+
+        // enfin, supprime la catégorie
+        categories.deleteById(id);
     }
 }

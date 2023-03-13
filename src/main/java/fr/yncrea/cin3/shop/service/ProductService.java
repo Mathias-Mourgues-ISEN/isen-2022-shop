@@ -1,8 +1,6 @@
 package fr.yncrea.cin3.shop.service;
 
-import fr.yncrea.cin3.shop.form.CategoryForm;
 import fr.yncrea.cin3.shop.form.ProductForm;
-import fr.yncrea.cin3.shop.model.Category;
 import fr.yncrea.cin3.shop.model.Product;
 import fr.yncrea.cin3.shop.repository.CategoryRepository;
 import fr.yncrea.cin3.shop.repository.ProductRepository;
@@ -76,5 +74,9 @@ public class ProductService {
 
     public List<Product> findByCategory(UUID uuid) {
         return products.findByCategoryId(uuid);
+    }
+
+    public void remove(UUID id) {
+        products.deleteById(id);
     }
 }

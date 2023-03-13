@@ -6,6 +6,12 @@
 <div th:fragment="content">
     <h1>Liste des produits</h1>
 
+    <div class="d-flex flex-row-reverse mb-3">
+        <a href="#" th:href="@{/admin/product/create}" class="btn btn-primary">
+            <i class="ri-add-circle-line"></i>
+        </a>
+    </div>
+
     <table class="table table-dark table-striped">
         <thead>
         <tr>
@@ -20,6 +26,11 @@
                 <a href="#" th:href="@{/admin/product/update/{id}(id=*{uuid})}" class="btn btn-primary">
                     <i class="ri-edit-line"></i>
                 </a>
+                <form method="post" th:action="@{/admin/product/remove/{id}(id=*{uuid})}" class="d-inline">
+                    <button class="btn btn-primary" type="submit">
+                        <i class="ri-delete-bin-line"></i>
+                    </button>
+                </form>
             </td>
         </tr>
         </tbody>
