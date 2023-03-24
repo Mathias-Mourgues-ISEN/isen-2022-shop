@@ -6,7 +6,7 @@
 <div th:fragment="content">
     <h1>Produit</h1>
 
-    <form action="#" th:action="@{/admin/product/save}" method="post" th:object="${form}">
+    <form action="#" th:action="@{/admin/product/save}" method="post" th:object="${form}" enctype="multipart/form-data">
         <input type="hidden" th:field="*{uuid}">
 
         <div class="mb-3">
@@ -30,6 +30,13 @@
             </textarea>
         </div>
 
+        <div class="mb-3">
+            <img th:if="*{picturePresent}" th:src="@{/product/{uuid}/picture(uuid = *{uuid})}">
+
+            <input th:field="*{picture}" class="form-control form-control-lg" type="file" placeholder="Image du produit"
+                   th:classappend="${not #lists.isEmpty(#fields.errors('picture'))} ? is-invalid">
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('picture')}" th:errors="*{picture}" />
+        </div>
 
         <button type="submit" class="btn btn-primary">Enregistrer</button>
     </form>
