@@ -4,6 +4,8 @@ import fr.yncrea.cin3.shop.form.ProductForm;
 import fr.yncrea.cin3.shop.service.CategoryService;
 import fr.yncrea.cin3.shop.service.ProductService;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -46,8 +48,8 @@ public class ProductAdminController {
     }
 
     @GetMapping
-    public String list(Model model) {
-        model.addAttribute("objects", service.findAll());
+    public String list(Model model, @PageableDefault(page = 0, size = 5) Pageable pageable) {
+        model.addAttribute("objects", service.findAll(pageable));
 
         return "admin/product/list";
     }

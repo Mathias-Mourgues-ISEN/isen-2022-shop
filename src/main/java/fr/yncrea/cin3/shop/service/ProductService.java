@@ -7,6 +7,8 @@ import fr.yncrea.cin3.shop.repository.ProductRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.FileSystemResource;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -106,8 +108,8 @@ public class ProductService {
     }
 
     @Transactional
-    public List<Product> findAll() {
-        return products.findAll();
+    public Page<Product> findAll(Pageable pageable) {
+        return products.findAllAndFetch(pageable);
     }
 
     public List<Product> findByCategory(UUID uuid) {
