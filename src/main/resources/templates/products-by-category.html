@@ -16,7 +16,10 @@
                     <h5 class="card-title" th:text="${product.name}">Card title</h5>
                     <p class="card-text" th:text="${product.description}">Description</p>
                 </div>
-                <div class="card-footer"><span th:text="${ #numbers.formatDecimal((0.0 + product.price) / 1000, 0, 2) }">12.50</span>€</div>
+                <div class="card-footer">
+                    <span th:text="${ #numbers.formatDecimal((0.0 + product.price) / 1000, 0, 2) }">12.50</span>€
+                    <button class="btn btn-primary" th:attr="uuid=${product.uuid}" onclick="addProduct(this.getAttribute('uuid'))">Ajouter</button>
+                </div>
             </div>
         </div>
     </div>
