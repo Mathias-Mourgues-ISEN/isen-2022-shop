@@ -2,6 +2,8 @@ package fr.yncrea.cin3.shop.controller;
 
 import fr.yncrea.cin3.shop.service.CategoryService;
 import fr.yncrea.cin3.shop.service.ProductService;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,5 +35,10 @@ public class IndexController {
         model.addAttribute("products", productService.findByCategory(uuid));
 
         return "products-by-category";
+    }
+
+    @GetMapping("product/{uuid}/picture")
+    public ResponseEntity<FileSystemResource> productPicture(@PathVariable UUID uuid) {
+        return productService.getPictureAsResponseEntity(uuid);
     }
 }

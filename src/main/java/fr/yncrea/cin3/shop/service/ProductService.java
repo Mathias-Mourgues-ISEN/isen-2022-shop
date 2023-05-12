@@ -5,8 +5,17 @@ import fr.yncrea.cin3.shop.model.Product;
 import fr.yncrea.cin3.shop.repository.CategoryRepository;
 import fr.yncrea.cin3.shop.repository.ProductRepository;
 import jakarta.transaction.Transactional;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.UUID;
 
@@ -16,9 +25,19 @@ public class ProductService {
 
     private CategoryRepository categories;
 
-    public ProductService(ProductRepository products, CategoryRepository categories) {
+    private Path uploadPath;
+
+    public ProductService(ProductRepository products, CategoryRepository categories,
+                          @Value("${application.uploads.products:var/uploads/products}") String uploadPath) {
         this.products = products;
         this.categories = categories;
+
+        this.uploadPath = Paths.get(uploadPath).toAbsolutePath().normalize();
+
+        // si le répertoire n'existe pas, on va le créer
+        if (!this.uploadPath.toFile().isDirectory()) {
+            this.uploadPath.toFile().mkdirs();
+        }
     }
 
     @Transactional
@@ -38,6 +57,7 @@ public class ProductService {
         form.setDescription(product.getDescription());
         form.setPrice(product.getPrice() / 1000.0);
         form.setCategory(product.getCategory().getUuid());
+        form.setPicturePresent(product.getPictureType() != null);
 
         return form;
     }
@@ -63,13 +83,33 @@ public class ProductService {
         var category = categories.findById(form.getCategory()).orElseThrow(() -> new RuntimeException("La catégorie n'existe pas"));
         product.setCategory(category);
 
+        // sauvegarde le type de la pièce jointe
+        var picture = form.getPicture();
+        if (!picture.isEmpty()) {
+            // TODO Il faudrait vérifier que le type est autorisé (uniquement jpg/png par exemple)
+            product.setPictureType(picture.getContentType());
+        }
+
         // sauvegarde en base
-        return products.save(product);
+       var result = products.save(product);
+
+        // sauvegarde l'image si existante
+        // à faire après le "save" pour déjà avoir l'id
+        try {
+            if (!picture.isEmpty()) {
+                var target = Paths.get(uploadPath.toString(), result.getUuid().toString());
+                picture.transferTo(target);
+            }
+        } catch (IOException e) {
+            // TODO erreur lors de l'upload
+        }
+
+        return result;
     }
 
     @Transactional
-    public List<Product> findAll() {
-        return products.findAll();
+    public Page<Product> findAll(Pageable pageable) {
+        return products.findAllAndFetch(pageable);
     }
 
     public List<Product> findByCategory(UUID uuid) {
@@ -78,5 +118,18 @@ public class ProductService {
 
     public void remove(UUID id) {
         products.deleteById(id);
+    }
+
+    public ResponseEntity<FileSystemResource> getPictureAsResponseEntity(UUID uuid) {
+        var match = products.findById(uuid);
+        if (match.isEmpty() || match.get().getPictureType() == null)
+            return ResponseEntity.notFound().build();
+
+        var result = match.get();
+        var target = Paths.get(uploadPath.toString(), result.getUuid().toString());
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_TYPE, result.getPictureType())
+                .body(new FileSystemResource(target));
     }
 }

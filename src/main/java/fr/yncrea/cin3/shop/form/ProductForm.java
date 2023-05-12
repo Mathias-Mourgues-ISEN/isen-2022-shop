@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.UUID;
 
@@ -24,4 +25,8 @@ public class ProductForm {
 
     @NotNull
     private UUID category;
+
+    private MultipartFile picture;
+
+    private boolean picturePresent = false;
 }
